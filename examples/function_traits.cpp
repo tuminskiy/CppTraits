@@ -7,22 +7,7 @@
 class MyClass {};
 
 template <class Traits>
-void print_traits_info() {
-  auto arg_printer = [](auto arg) {
-    using T = typename decltype(arg)::type;
-
-    std::cout << ' ' << std::quoted(typeid(T).name());
-  };
-
-  std::cout << "Return type: " << typeid(typename Traits::result_type).name() << '\n'
-            << "Args count: " << Traits::args_count << '\n'
-            << "Args types:";
-  
-  Traits::visit_args(arg_printer);
-
-  std::cout << '\n';
-}
-
+void print_traits_info();
 
 void my_function(MyClass, char) {}
 
@@ -45,4 +30,32 @@ int main() {
   print_traits_info<func_traits>();
 
   return 0;
+}
+
+// Output:
+// --- Lambda traits info ---
+// Return type: i
+// Args count: 2
+// Args types: "c" "7MyClass"
+//
+// --- Func traits info ---
+// Return type: v
+// Args count: 2
+// Args types: "7MyClass" "c"
+
+template <class Traits>
+void print_traits_info() {
+  auto arg_printer = [](auto arg) {
+    using T = typename decltype(arg)::type;
+
+    std::cout << ' ' << std::quoted(typeid(T).name());
+  };
+
+  std::cout << "Return type: " << typeid(typename Traits::result_type).name() << '\n'
+            << "Args count: " << Traits::args_count << '\n'
+            << "Args types:";
+  
+  Traits::visit_args(arg_printer);
+
+  std::cout << '\n';
 }
