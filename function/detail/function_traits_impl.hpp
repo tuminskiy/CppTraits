@@ -1,4 +1,6 @@
-#include <type_traits>
+#pragma once
+
+#include "function_traits_impl_base.hpp"
 
 namespace cpp_traits::detail {
 
@@ -7,30 +9,19 @@ struct function_traits_impl{};
 
 
 template <class ReturnType, class... Args>
-struct function_traits_impl<ReturnType(Args...)> {
-
-  using result_type = ReturnType;
-
-  static constexpr auto args_count = sizeof...(Args);
-
-  template <std::size_t I>
-  struct arg {
-    using type = std::tuple_element_t<I, std::tuple<Args...>>;
-  };
-};
+struct function_traits_impl<ReturnType(Args...)>
+  : public function_traits_impl_base<ReturnType, Args...>
+{};
 
 
 template <class ClassType, class ReturnType, class... Args>
 struct function_traits_impl<ReturnType(ClassType::*)(Args...) const>
-{
-  using result_type = ReturnType;
+  : public function_traits_impl_base<ReturnType, Args...>
+{};
 
-  static constexpr auto args_count = sizeof...(Args);
-
-  template <std::size_t I>
-  struct arg {
-    using type = std::tuple_element_t<I, std::tuple<Args...>>;
-  };
-};
+template <class ClassType, class ReturnType, class... Args>
+struct function_traits_impl<ReturnType(ClassType::*)(Args...)>
+  : public function_traits_impl_base<ReturnType, Args...>
+{};
 
 } // namespace cpp_traits::detail

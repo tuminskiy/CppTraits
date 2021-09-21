@@ -1,3 +1,5 @@
+#pragma once
+
 #include <type_traits>
 
 #include "function_traits_deduction_impl.hpp"

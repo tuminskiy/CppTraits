@@ -15,13 +15,20 @@ void my_function(MyClass, char) {}
 int main() {
   using namespace cpp_traits;
 
-  auto my_lambda = [](char, MyClass) { return 42; };
+  auto my_lambda1 = [](char, MyClass) { return 42; };
+  auto my_lambda2 = [i = 1]() mutable { return ++i; };
 
 
-  using lambda_traits = function_traits<decltype(my_lambda)>;
+  using lambda1_traits = function_traits<decltype(my_lambda1)>;
 
-  std::cout << "--- Lambda traits info ---\n";
-  print_traits_info<lambda_traits>();
+  std::cout << "--- Lambda1 traits info ---\n";
+  print_traits_info<lambda1_traits>();
+
+
+  using lambda2_traits = function_traits<decltype(my_lambda2)>;
+
+  std::cout << "\n--- Lambda2 traits info ---\n";
+  print_traits_info<lambda2_traits>();
 
 
   using func_traits = function_traits<decltype(my_function)>;
@@ -33,11 +40,16 @@ int main() {
 }
 
 // Output:
-// --- Lambda traits info ---
+// --- Lambda1 traits info ---
 // Return type: i
 // Args count: 2
 // Args types: "c" "7MyClass"
 //
+// --- Lambda2 traits info ---
+// Return type: i
+// Args count: 0
+// Args types:
+// 
 // --- Func traits info ---
 // Return type: v
 // Args count: 2

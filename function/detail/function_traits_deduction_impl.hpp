@@ -1,4 +1,4 @@
-#include <type_traits>
+#pragma once
 
 namespace cpp_traits::detail {
 
